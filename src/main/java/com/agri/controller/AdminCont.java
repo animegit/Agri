@@ -104,9 +104,34 @@ public class AdminCont {
         else{
             imguuid=imgName;
         }
-        product.setImage_Name(imguuid);
+        product.setImageName(imguuid);
         productService.addProduct(product);
         return "redirect:/admin/products";
+
+    }
+
+    @GetMapping("/admin/product/delete/{id}")
+    public String deleteProd(@PathVariable long id){
+        productService.removeProduct(id);
+        return "redirect:/admin/products";
+
+    }
+    @GetMapping("/admin/product/update/{id}")
+    public String updateProd(@PathVariable long id,Model model){
+
+        Product product=productService.getProductById(id).get();
+        ProductDTO productDTO=new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setName(productDTO.getName());
+        productDTO.setDescription(productDTO.getDescription());
+        productDTO.setPrice(productDTO.getPrice());
+        productDTO.setCategoryId(product.getCategory().getId());
+        productDTO.setImageName(product.getImageName());
+        model.addAttribute("categories",categoryService.getcat());
+        model.addAttribute("productDTO",productDTO);
+        return "productAdd";
+
+
 
     }
 }
